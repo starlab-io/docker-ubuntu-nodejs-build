@@ -6,6 +6,8 @@ RUN mkdir -p /root/.cargo/
 RUN echo "[target.aarch64-unknown-linux-gnu]\r\nlinker = \"aarch64-linux-gnu-gcc\"" >> /root/.cargo/config
 RUN echo "[target.arm-unknown-linux-gnueabihf]\r\nlinker = \"arm-linux-gnueabihf-gcc\"" >> /root/.cargo/config
 
+ENV PATH "/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 # install rustup
 RUN curl https://sh.rustup.rs -sSf > rustup-install.sh && sh ./rustup-install.sh  -y && rm rustup-install.sh
 
