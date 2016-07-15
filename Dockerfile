@@ -1,16 +1,31 @@
-FROM starlabio/centos-base:1.0
+FROM starlabio/ubuntu-base:1.0
 MAINTAINER Doug Goldstein <doug@starlab.io>
 
-# setup linkers for Cargo
-RUN mkdir -p /root/.cargo/
+ENV NODE_VERSION 6.1.0
 
-ENV PATH "/root/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" && \
+        tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
+        rm "node-v$NODE_VERSION-linux-x64.tar.xz" && \
+        npm install -g npm && \
+        printf '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
 
-# install rustup
-RUN curl https://sh.rustup.rs -sSf > rustup-install.sh && sh ./rustup-install.sh  -y && rm rustup-install.sh
+RUN apt-get update && \
+    apt-get --quiet --yes install \
+        xvfb libgtk2.0-0 libxtst6 libxss1 libgconf-2-4 libasound2 \
+        icnsutils graphicsmagick xz-utils rpm bsdtar && \
+        apt-get autoremove -y && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists* /tmp/* /var/tmp/*
 
-# Install x86_64 Rust
-RUN /root/.cargo/bin/rustup default 1.10.0-x86_64-unknown-linux-gnu
+ADD npmrc /etc/npmrc
 
-# Install rustfmt / cargo fmt for testing
-RUN cargo install --root /usr/local rustfmt --vers 0.5.0
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
+ENV SCREEN_WIDTH 1360
+ENV SCREEN_HEIGHT 1020
+ENV SCREEN_DEPTH 24
+ENV DISPLAY :99.0
+
+VOLUME ["/source"]
+WORKDIR /source
+CMD ["/bin/bash"]
