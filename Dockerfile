@@ -12,10 +12,13 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 RUN apt-get update && \
     apt-get --quiet --yes install \
         xvfb libgtk2.0-0 libxtst6 libxss1 libgconf-2-4 libasound2 \
+        ruby ruby-dev \
         icnsutils graphicsmagick xz-utils rpm bsdtar && \
         apt-get autoremove -y && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists* /tmp/* /var/tmp/*
+
+RUN gem install fpm
 
 ADD npmrc /etc/npmrc
 
