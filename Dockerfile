@@ -1,7 +1,7 @@
 FROM starlabio/ubuntu-base:1.0
 MAINTAINER Doug Goldstein <doug@starlab.io>
 
-ENV NODE_VERSION 6.6.0
+ENV NODE_VERSION 6.10.0
 
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" && \
         tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
