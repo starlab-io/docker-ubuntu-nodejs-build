@@ -1,18 +1,20 @@
-FROM starlabio/ubuntu-base:1.0
+FROM starlabio/ubuntu-base:1.3
 MAINTAINER Doug Goldstein <doug@starlab.io>
 
-ENV NODE_VERSION 6.10.0
+# add Node repo
+ADD nodesource.list /etc/apt/sources.list.d/
+RUN curl -sSf https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
-RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" && \
-        tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 && \
-        rm "node-v$NODE_VERSION-linux-x64.tar.xz" && \
-        npm install -g npm && \
-        printf '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
+# add Yarn repo
+RUN curl -sSf https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+ADD yarnpkg.list /etc/apt/sources.list.d/
 
-RUN apt-get update && \
+ENV APT_GET_UPDATE 2017-08-17
+
+RUN apt-get -y update && \
     apt-get --quiet --yes install \
         xvfb libgtk2.0-0 libxtst6 libxss1 libgconf-2-4 libasound2 \
-        ruby ruby-dev \
+        ruby ruby-dev nodejs yarn \
         icnsutils graphicsmagick xz-utils rpm bsdtar && \
         apt-get autoremove -y && \
         apt-get clean && \
