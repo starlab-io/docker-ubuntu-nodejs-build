@@ -22,6 +22,8 @@ RUN apt-get -y update && \
 
 RUN gem install fpm
 
+RUN npm install -g license-checker
+
 ADD npmrc /etc/npmrc
 
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
