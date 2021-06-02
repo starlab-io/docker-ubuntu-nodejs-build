@@ -24,6 +24,8 @@ RUN gem install fpm
 
 RUN npm install -g license-checker
 
+RUN npm install spectron
+
 ADD npmrc /etc/npmrc
 
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
