@@ -22,7 +22,7 @@ RUN apt-get -y update && \
 
 RUN gem install fpm
 
-RUN npm install -g license-checker
+RUN npm install -g license-checker spectron
 
 ADD npmrc /etc/npmrc
 
